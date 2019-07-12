@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableHighlight
+} from "react-native";
 
 import data from "../service/api";
 
@@ -10,22 +17,40 @@ export default class Main extends Component {
     title: "Space Box"
   };
 
+  state = {
+    visivel: false,
+    nome: "",
+    cargo: "",
+    foto: ""
+  };
+
+  modal_show = (item) => {
+    this.setState(state => ({
+      visivel: !state.visivel
+    }));
+  };
+
   item_list = (
     { item } // item da lista
   ) => (
-    <View style={estilo.item}>
-      <Image />
-      <View style={estilo.contentTextos}>
-        <Text style={estilo.nome}>{item.nome}</Text>
-        <Text style={estilo.cargo}>{item.cargo}</Text>
+    <TouchableHighlight onPress={this.modal_show}>
+      <View style={estilo.item}>
+        <Image style={estilo.imagem} source={{ uri: item.foto }} />
+        <View style={estilo.contentTextos}>
+          <Text style={estilo.nome}>{item.nome}</Text>
+          <Text style={estilo.cargo}>{item.cargo}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 
   render() {
     return (
       <View style={estilo.container}>
-        <DetalheComponent />
+        <DetalheComponent 
+        visivel={this.state.visivel} 
+        nome={this.state.nome}
+        cargo={this.state.cargo} />
         <FlatList
           contentContainerStyle={estilo.lista}
           data={data}
